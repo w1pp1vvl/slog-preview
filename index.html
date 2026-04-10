@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Slog — Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0E0F1A;
+    --bg-card: rgba(255,255,255,0.05);
+    --bg-card-hover: rgba(255,255,255,0.08);
+    --accent: #A78BFA;
+    --accent-light: #C4B5FD;
+    --accent-glow: rgba(167,139,250,0.15);
+    --accent-glow-strong: rgba(167,139,250,0.25);
+    --text: #E2E8F0;
+    --text-sub: #94A3B8;
+    --text-dim: #64748B;
+    --border: rgba(167,139,250,0.1);
+    --radius: 20px;
+    --radius-sm: 14px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Atmospheric background ── */
+  .bg-atmosphere {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-atmosphere::before {
+    content: '';
+    position: absolute;
+    top: -30%; left: -20%;
+    width: 80%; height: 80%;
+    background: radial-gradient(ellipse, rgba(167,139,250,0.08) 0%, transparent 70%);
+    animation: float1 20s ease-in-out infinite;
+  }
+  .bg-atmosphere::after {
+    content: '';
+    position: absolute;
+    bottom: -20%; right: -20%;
+    width: 70%; height: 70%;
+    background: radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 70%);
+    animation: float2 25s ease-in-out infinite;
+  }
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(5%, 8%); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-5%, -6%); }
+  }
+
+  /* ── Container ── */
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 50px 0 10px;
+    text-align: center;
+  }
+  .logo {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .logo span {
+    color: var(--text);
+    font-weight: 300;
+  }
+  .tagline {
+    font-size: 13px;
+    color: var(--text-sub);
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  /* ── Welcome ── */
+  .welcome {
+    margin-top: 36px;
+    margin-bottom: 28px;
+  }
+  .welcome-name {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .welcome-sub {
+    font-size: 14px;
+    color: var(--text-sub);
+    font-weight: 300;
+  }
+
+  /* ── Stats row ── */
+  .stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    flex: 1;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 14px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .stat-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-glow);
+  }
+  .stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-sub);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Action cards (main menu) ── */
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .action-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+  .action-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-glow-strong);
+    transform: translateY(-2px);
+  }
+  .action-card.primary {
+    background: linear-gradient(135deg, rgba(167,139,250,0.15), rgba(139,92,246,0.08));
+    border-color: rgba(167,139,250,0.2);
+  }
+  .action-card.primary:hover {
+    background: linear-gradient(135deg, rgba(167,139,250,0.22), rgba(139,92,246,0.12));
+  }
+  .action-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .action-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .action-desc {
+    font-size: 12px;
+    color: var(--text-sub);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  /* ── Channel card ── */
+  .section-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .channel-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .channel-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-glow);
+  }
+  .channel-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #7C3AED);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .channel-info { flex: 1; }
+  .channel-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .channel-meta {
+    font-size: 12px;
+    color: var(--text-sub);
+  }
+  .channel-status {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(167,139,250,0.12);
+    color: var(--accent-light);
+    font-weight: 500;
+  }
+
+  /* ── Plan badge ── */
+  .plan-bar {
+    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(139,92,246,0.05));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .plan-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .plan-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--accent);
+    color: var(--bg);
+    letter-spacing: 0.5px;
+  }
+  .plan-text {
+    font-size: 13px;
+    color: var(--text-sub);
+  }
+  .plan-upgrade {
+    font-size: 12px;
+    color: var(--accent-light);
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .plan-upgrade:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Bottom nav ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: rgba(14,15,26,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 10px 20px 28px;
+    z-index: 10;
+  }
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: all 0.2s;
+  }
+  .nav-item.active .nav-icon { color: var(--accent-light); }
+  .nav-item.active .nav-label { color: var(--accent-light); }
+  .nav-icon {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-dim);
+  }
+  .nav-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 0; }
+</style>
+</head>
+<body>
+
+<div class="bg-atmosphere"></div>
+
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">S<span>log</span></div>
+    <div class="tagline">ваш цифровой голос</div>
+  </div>
+
+  <!-- Welcome -->
+  <div class="welcome">
+    <div class="welcome-name">Привет, Лиселия</div>
+    <div class="welcome-sub">3 поста за эту неделю</div>
+  </div>
+
+  <!-- Plan bar -->
+  <div class="plan-bar">
+    <div class="plan-info">
+      <span class="plan-badge">PRO</span>
+      <span class="plan-text">12 из 90 постов</span>
+    </div>
+    <a class="plan-upgrade">Тарифы →</a>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-number">2</div>
+      <div class="stat-label">Каналы</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">12</div>
+      <div class="stat-label">Постов</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">89%</div>
+      <div class="stat-label">Одобрено</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <div class="action-card primary">
+      <span class="action-icon">✍️</span>
+      <div class="action-title">Новый пост</div>
+      <div class="action-desc">Создать с AI</div>
+    </div>
+    <div class="action-card">
+      <span class="action-icon">📢</span>
+      <div class="action-title">Каналы</div>
+      <div class="action-desc">Управление</div>
+    </div>
+    <div class="action-card">
+      <span class="action-icon">📊</span>
+      <div class="action-title">Аналитика</div>
+      <div class="action-desc">Статистика</div>
+    </div>
+    <div class="action-card">
+      <span class="action-icon">👤</span>
+      <div class="action-title">Профиль</div>
+      <div class="action-desc">Настройки</div>
+    </div>
+  </div>
+
+  <!-- Channels -->
+  <div class="section-title">Ваши каналы</div>
+
+  <div class="channel-card">
+    <div class="channel-avatar">Т</div>
+    <div class="channel-info">
+      <div class="channel-name">@tech_channel</div>
+      <div class="channel-meta">1.2K подписчиков · 5 постов</div>
+    </div>
+    <span class="channel-status">✅ Стиль</span>
+  </div>
+
+  <div class="channel-card">
+    <div class="channel-avatar">Б</div>
+    <div class="channel-info">
+      <div class="channel-name">@business_notes</div>
+      <div class="channel-meta">340 подписчиков · 7 постов</div>
+    </div>
+    <span class="channel-status">✅ Стиль</span>
+  </div>
+
+  <div style="height: 90px;"></div>
+</div>
+
+<!-- Bottom nav -->
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Главная</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">📢</span>
+    <span class="nav-label">Каналы</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">✍️</span>
+    <span class="nav-label">Создать</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">Профиль</span>
+  </div>
+</div>
+
+</body>
+</html>
