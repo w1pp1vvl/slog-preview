@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Slog — Preview</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -24,8 +24,10 @@
     --text-dim: #555D74;
     --radius: 22px;
     --radius-sm: 16px;
-    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Inter', -apple-system, sans-serif;
+    --font-alt1: 'Space Grotesk', sans-serif;
+    --font-alt2: 'Outfit', sans-serif;
   }
 
   body {
@@ -109,18 +111,44 @@
 
   .logo {
     font-family: var(--font-display);
-    font-size: 48px;
-    font-weight: 300;
-    letter-spacing: 12px;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: 8px;
     color: var(--text);
     text-transform: uppercase;
     margin-bottom: 2px;
     position: relative;
+    background: linear-gradient(135deg, #fff 20%, var(--accent-light) 50%, var(--accent) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   .logo em {
     font-style: normal;
+  }
+
+  /* ── Font switcher ── */
+  .font-switch {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .font-btn {
+    font-size: 11px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--text-sub);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+  }
+  .font-btn:hover, .font-btn.active {
+    background: rgba(167,139,250,0.12);
+    border-color: rgba(167,139,250,0.25);
     color: var(--accent-light);
-    font-weight: 600;
   }
 
   .tagline {
@@ -480,7 +508,22 @@
     <div class="logo"><em>S</em>log</div>
     <div class="tagline">ваш цифровой голос</div>
     <div class="hero-line"></div>
+    <div class="font-switch">
+      <button class="font-btn active" onclick="setFont('Playfair Display', this)">A — Playfair</button>
+      <button class="font-btn" onclick="setFont('Space Grotesk', this)">B — Space</button>
+      <button class="font-btn" onclick="setFont('Outfit', this)">C — Outfit</button>
+    </div>
   </div>
+
+<script>
+function setFont(f, btn) {
+  document.querySelectorAll('.logo, .welcome-name, .stat-number, .action-title').forEach(el => {
+    el.style.fontFamily = f + ', sans-serif';
+  });
+  document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
 
   <!-- Welcome -->
   <div class="welcome">
