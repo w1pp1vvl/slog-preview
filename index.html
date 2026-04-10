@@ -3,610 +3,532 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Slog — Preview</title>
+<title>Slog</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #0B0C14;
-    --glass: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.06);
-    --glass-hover: rgba(255,255,255,0.07);
-    /* Primary — лаванда */
+    --bg: #0A0A12;
+    --surface: #12121E;
+    --surface-2: #1A1A2A;
     --accent: #A78BFA;
     --accent-light: #C4B5FD;
-    --accent-soft: #8B7DCF;
-    /* Secondary — холодный мятный */
-    --mint: #5EEAD4;
-    --mint-soft: rgba(94,234,212,0.15);
-    --mint-border: rgba(94,234,212,0.12);
-    /* Tertiary — розовый */
-    --rose: #F9A8D4;
-    --rose-soft: rgba(249,168,212,0.12);
-    --rose-border: rgba(249,168,212,0.1);
-    /* Blue */
-    --blue: #7DD3FC;
-    --blue-soft: rgba(125,211,252,0.12);
-
-    --text: #E2E8F0;
-    --text-sub: #8892A8;
-    --text-dim: #555D74;
-    --radius: 22px;
-    --radius-sm: 16px;
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Inter', -apple-system, sans-serif;
+    --accent-dim: rgba(167,139,250,0.08);
+    --text: #EAEAF0;
+    --text-2: #A0A0B8;
+    --text-3: #5C5C72;
+    --border: rgba(255,255,255,0.05);
+    --r: 20px;
+    --font: 'Space Grotesk', 'Inter', sans-serif;
   }
 
+  html { background: var(--bg); }
   body {
-    font-family: var(--font-body);
+    font-family: var(--font);
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── Atmospheric layers ── */
-  .bg-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    background:
-      radial-gradient(ellipse 60% 50% at 15% 8%, rgba(139,92,246,0.14) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 35% at 85% 25%, rgba(94,234,212,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 70% 70%, rgba(249,168,212,0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(88,28,135,0.1) 0%, transparent 50%),
-      var(--bg);
-  }
-  .bg-layer::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.3;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-    background-size: 200px;
-  }
-  .bg-layer::after {
-    content: '';
-    position: absolute;
-    inset: -10%;
-    width: 120%; height: 120%;
-    background:
-      radial-gradient(circle 200px at 15% 20%, rgba(167,139,250,0.06) 0%, transparent 100%),
-      radial-gradient(circle 250px at 80% 35%, rgba(94,234,212,0.04) 0%, transparent 100%),
-      radial-gradient(circle 180px at 50% 85%, rgba(249,168,212,0.04) 0%, transparent 100%);
-    animation: drift 30s ease-in-out infinite;
-  }
-  @keyframes drift {
-    0%, 100% { transform: translate(0,0) rotate(0deg); }
-    33% { transform: translate(2%,3%) rotate(1deg); }
-    66% { transform: translate(-1%,-2%) rotate(-0.5deg); }
-  }
-
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 420px;
+    max-width: 430px;
     margin: 0 auto;
-    padding: 0 20px 100px;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* ── Hero ── */
+  /* ══════ HERO ══════ */
   .hero {
-    padding: 48px 0 0;
-    text-align: center;
     position: relative;
+    height: 320px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 24px 28px;
   }
-  .hero-glow {
+
+  /* Abstract art background */
+  .hero-bg {
     position: absolute;
-    top: 20px; left: 50%;
-    transform: translateX(-50%);
-    width: 220px; height: 220px;
-    background: radial-gradient(circle, rgba(167,139,250,0.18) 0%, rgba(94,234,212,0.05) 50%, transparent 70%);
-    filter: blur(50px);
-    pointer-events: none;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 100% 80% at 30% 10%, rgba(167,139,250,0.25) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 70% at 80% 30%, rgba(99,102,241,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(139,92,246,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 90% 40% at 60% 60%, rgba(88,28,135,0.12) 0%, transparent 50%);
+    filter: blur(1px);
   }
-  .logo {
-    font-family: var(--font-display);
-    font-size: 52px;
-    font-weight: 700;
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    margin-bottom: 2px;
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle 120px at 25% 35%, rgba(196,181,253,0.2), transparent),
+      radial-gradient(circle 80px at 70% 20%, rgba(167,139,250,0.15), transparent),
+      radial-gradient(circle 100px at 55% 70%, rgba(139,92,246,0.12), transparent);
+    animation: morph 20s ease-in-out infinite alternate;
+  }
+  @keyframes morph {
+    0% { transform: scale(1) translate(0,0); }
+    50% { transform: scale(1.1) translate(3%,-2%); }
+    100% { transform: scale(1) translate(-2%,3%); }
+  }
+  /* Bottom fade to content */
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  }
+
+  /* Noise */
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    background-size: 200px;
+    mix-blend-mode: overlay;
+  }
+
+  .hero-content {
     position: relative;
-    background: linear-gradient(135deg, #fff 10%, var(--accent-light) 40%, var(--mint) 90%);
+    z-index: 2;
+  }
+  .hero-logo {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .hero-logo span {
+    background: linear-gradient(135deg, #fff 30%, var(--accent-light) 70%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
-  .tagline {
-    font-size: 13px;
-    color: var(--text-sub);
+  .hero-tagline {
+    font-size: 14px;
+    color: var(--text-2);
     font-weight: 300;
-    letter-spacing: 3px;
+    letter-spacing: 0.5px;
   }
-  .hero-line {
-    width: 60px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-soft), var(--mint), transparent);
-    margin: 18px auto 0;
+  .hero-user {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
   }
-
-  /* ── Font switcher ── */
-  .font-switch {
-    display: flex; gap: 6px;
-    justify-content: center;
-    margin-top: 14px;
-  }
-  .font-btn {
-    font-size: 11px;
-    padding: 5px 14px;
-    border-radius: 20px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--text-sub);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: var(--font-body);
-  }
-  .font-btn:hover, .font-btn.active {
-    background: rgba(167,139,250,0.12);
-    border-color: rgba(167,139,250,0.25);
+  .hero-user span {
     color: var(--accent-light);
   }
 
-  /* ── Welcome ── */
-  .welcome {
-    margin-top: 34px;
-    margin-bottom: 22px;
-  }
-  .welcome-name {
-    font-family: var(--font-display);
-    font-size: 28px;
-    font-weight: 400;
-    margin-bottom: 4px;
-  }
-  .welcome-sub {
-    font-size: 13px;
-    color: var(--text-sub);
-    font-weight: 300;
+  /* ══════ CONTENT ══════ */
+  .content {
+    padding: 0 20px;
   }
 
-  /* ── Plan bar ── */
-  .plan-bar {
-    background: linear-gradient(135deg, rgba(167,139,250,0.06), rgba(94,234,212,0.04));
-    border: 1px solid rgba(167,139,250,0.1);
-    border-radius: var(--radius-sm);
-    padding: 14px 18px;
+  /* ── Status strip ── */
+  .status-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .status-item {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .status-num {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+  .status-label {
+    font-size: 10px;
+    color: var(--text-3);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  /* ── CTA button ── */
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), #7C3AED);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(167,139,250,0.25);
+  }
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1) 100%);
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .section-action {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  /* ── Plan card ── */
+  .plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 20px;
     position: relative;
     overflow: hidden;
   }
-  .plan-bar::before {
+  .plan-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 5%, var(--accent) 30%, var(--mint) 70%, transparent 95%);
-    opacity: 0.4;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), #7C3AED, transparent);
   }
-  .plan-info { display: flex; align-items: center; gap: 10px; }
-  .plan-badge {
-    font-size: 10px; font-weight: 600;
-    padding: 3px 10px; border-radius: 20px;
-    background: linear-gradient(135deg, var(--accent), #7C3AED);
-    color: #fff; letter-spacing: 1.5px; text-transform: uppercase;
-  }
-  .plan-text { font-size: 13px; color: var(--text-sub); }
-  .plan-upgrade {
-    font-size: 12px; color: var(--mint);
-    font-weight: 400; cursor: pointer; text-decoration: none;
-  }
-
-  /* ── Stats ── */
-  .stats {
-    display: flex; gap: 10px; margin-bottom: 28px;
-  }
-  .stat-card {
-    flex: 1;
-    background: var(--glass);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-sm);
-    padding: 18px 10px;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .stat-card:nth-child(1) .stat-number { color: var(--accent-light); }
-  .stat-card:nth-child(2) .stat-number { color: var(--mint); }
-  .stat-card:nth-child(3) .stat-number { color: var(--rose); }
-  .stat-card:nth-child(1)::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 20%; right: 20%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    border-radius: 1px;
-  }
-  .stat-card:nth-child(2)::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 20%; right: 20%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--mint), transparent);
-    border-radius: 1px;
-  }
-  .stat-card:nth-child(3)::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 20%; right: 20%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--rose), transparent);
-    border-radius: 1px;
-  }
-  .stat-number {
-    font-family: var(--font-display);
-    font-size: 32px; font-weight: 600; line-height: 1;
-  }
-  .stat-label {
-    font-size: 10px; color: var(--text-dim);
-    margin-top: 6px; text-transform: uppercase; letter-spacing: 1px;
-  }
-
-  /* ── Divider ── */
-  .divider {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 18px;
-  }
-  .divider-line {
-    flex: 1; height: 1px;
-    background: linear-gradient(90deg, var(--glass-border), transparent);
-  }
-  .divider-line:last-child {
-    background: linear-gradient(90deg, transparent, var(--glass-border));
-  }
-  .divider-text {
-    font-size: 11px; text-transform: uppercase;
-    letter-spacing: 2px; color: var(--text-dim);
-    font-weight: 400; white-space: nowrap;
-  }
-
-  /* ── Action cards ── */
-  .actions {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 12px; margin-bottom: 32px;
-  }
-  .action-card {
-    background: var(--glass);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
-    padding: 24px 18px;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    position: relative; overflow: hidden;
-  }
-  .action-card:hover {
-    background: var(--glass-hover);
-    transform: translateY(-2px);
-  }
-
-  /* Каждая карточка — свой цвет */
-  .action-card.c-violet {
-    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(139,92,246,0.04));
-    border-color: rgba(167,139,250,0.12);
-  }
-  .action-card.c-violet::after {
-    content: ''; position: absolute;
-    top: -1px; left: 15%; right: 15%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .action-card.c-violet .action-icon-wrap {
-    background: rgba(167,139,250,0.12);
-    box-shadow: 0 0 20px rgba(167,139,250,0.1);
-  }
-
-  .action-card.c-mint {
-    background: linear-gradient(135deg, rgba(94,234,212,0.07), rgba(94,234,212,0.02));
-    border-color: var(--mint-border);
-  }
-  .action-card.c-mint::after {
-    content: ''; position: absolute;
-    top: -1px; left: 15%; right: 15%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--mint), transparent);
-    opacity: 0.5;
-  }
-  .action-card.c-mint .action-icon-wrap {
-    background: var(--mint-soft);
-    box-shadow: 0 0 20px rgba(94,234,212,0.08);
-  }
-
-  .action-card.c-rose {
-    background: linear-gradient(135deg, rgba(249,168,212,0.07), rgba(249,168,212,0.02));
-    border-color: var(--rose-border);
-  }
-  .action-card.c-rose::after {
-    content: ''; position: absolute;
-    top: -1px; left: 15%; right: 15%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--rose), transparent);
-    opacity: 0.5;
-  }
-  .action-card.c-rose .action-icon-wrap {
-    background: var(--rose-soft);
-    box-shadow: 0 0 20px rgba(249,168,212,0.08);
-  }
-
-  .action-card.c-blue {
-    background: linear-gradient(135deg, rgba(125,211,252,0.07), rgba(125,211,252,0.02));
-    border-color: rgba(125,211,252,0.1);
-  }
-  .action-card.c-blue::after {
-    content: ''; position: absolute;
-    top: -1px; left: 15%; right: 15%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--blue), transparent);
-    opacity: 0.5;
-  }
-  .action-card.c-blue .action-icon-wrap {
-    background: var(--blue-soft);
-    box-shadow: 0 0 20px rgba(125,211,252,0.08);
-  }
-
-  .action-icon-wrap {
-    width: 44px; height: 44px;
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
+  .plan-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 14px;
   }
-  .action-title {
-    font-family: var(--font-display);
-    font-size: 17px; font-weight: 500;
-    margin-bottom: 3px;
+  .plan-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
   }
-  .action-desc {
-    font-size: 11px; color: var(--text-dim);
-    font-weight: 300; letter-spacing: 0.3px;
+  .plan-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .plan-upgrade-btn {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(167,139,250,0.2);
+    background: var(--accent-dim);
+    color: var(--accent-light);
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+  .plan-progress {
+    margin-bottom: 6px;
+  }
+  .plan-bar-outer {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .plan-bar-inner {
+    height: 100%;
+    width: 13%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .plan-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 6px;
   }
 
-  /* ── Channels ── */
-  .channel-card {
-    background: var(--glass);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
-    padding: 18px;
-    margin-bottom: 10px;
-    display: flex; align-items: center; gap: 14px;
+  /* ── Channel list ── */
+  .channel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px 18px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative; overflow: hidden;
+    transition: background 0.2s;
   }
-  .channel-card:hover {
-    background: var(--glass-hover);
-  }
-  .channel-card.ch-violet::before {
-    content: ''; position: absolute;
-    left: 0; top: 20%; bottom: 20%; width: 2px;
-    background: linear-gradient(180deg, transparent, var(--accent), transparent);
-  }
-  .channel-card.ch-mint::before {
-    content: ''; position: absolute;
-    left: 0; top: 20%; bottom: 20%; width: 2px;
-    background: linear-gradient(180deg, transparent, var(--mint), transparent);
-  }
-  .channel-avatar {
-    width: 44px; height: 44px;
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 20px; font-weight: 600;
+  .channel:hover { background: var(--surface-2); }
+  .channel-ava {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-light);
     flex-shrink: 0;
+    border: 1px solid var(--border);
   }
-  .channel-avatar.av-violet {
-    background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(139,92,246,0.1));
-    border: 1px solid rgba(167,139,250,0.2);
-    color: var(--accent-light);
+  .channel-body { flex: 1; }
+  .channel-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
   }
-  .channel-avatar.av-mint {
-    background: linear-gradient(135deg, rgba(94,234,212,0.15), rgba(94,234,212,0.05));
-    border: 1px solid var(--mint-border);
-    color: var(--mint);
+  .channel-sub {
+    font-size: 11px;
+    color: var(--text-3);
   }
-  .channel-info { flex: 1; }
-  .channel-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
-  .channel-meta { font-size: 11px; color: var(--text-dim); }
-  .channel-status {
-    font-size: 9px; padding: 3px 8px; border-radius: 20px;
-    font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+  .channel-arrow {
+    color: var(--text-3);
+    font-size: 16px;
   }
-  .channel-status.s-violet {
-    background: rgba(167,139,250,0.08);
-    border: 1px solid rgba(167,139,250,0.12);
-    color: var(--accent-light);
+
+  /* ── Quick actions ── */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 28px;
   }
-  .channel-status.s-mint {
-    background: var(--mint-soft);
-    border: 1px solid var(--mint-border);
-    color: var(--mint);
+  .qa {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .qa:hover { background: var(--surface-2); }
+  .qa-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .qa-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-2);
   }
 
   /* ── Bottom nav ── */
   .bottom-nav {
-    position: fixed; bottom: 0; left: 50%;
+    position: fixed;
+    bottom: 0; left: 50%;
     transform: translateX(-50%);
-    width: 100%; max-width: 420px;
-    background: rgba(11,12,20,0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-top: 1px solid var(--glass-border);
+    width: 100%; max-width: 430px;
+    background: rgba(10,10,18,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
     display: flex;
-    padding: 8px 16px 26px;
+    padding: 6px 8px 24px;
     z-index: 10;
   }
-  .bottom-nav::before {
-    content: ''; position: absolute;
-    top: 0; left: 10%; right: 10%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(167,139,250,0.12), rgba(94,234,212,0.08), transparent);
-  }
   .nav-item {
-    flex: 1; text-align: center;
-    cursor: pointer; padding: 8px 0;
-    transition: all 0.2s;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    padding: 8px 0;
     position: relative;
   }
-  .nav-item.active::before {
-    content: ''; position: absolute;
-    top: 0; left: 30%; right: 30%;
-    height: 2px; border-radius: 0 0 2px 2px;
+  .nav-item .ni {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 3px;
+    color: var(--text-3);
+    transition: color 0.15s;
   }
-  .nav-item:nth-child(1).active::before { background: var(--accent); }
-  .nav-item:nth-child(2).active::before { background: var(--mint); }
-  .nav-item:nth-child(3).active::before { background: var(--rose); }
-  .nav-item:nth-child(4).active::before { background: var(--blue); }
-  .nav-item.active:nth-child(1) .nav-icon,
-  .nav-item.active:nth-child(1) .nav-label { color: var(--accent-light); }
-  .nav-icon {
-    font-size: 20px; display: block;
-    margin-bottom: 4px; color: var(--text-dim);
-    transition: color 0.2s;
+  .nav-item .nl {
+    font-size: 9px;
+    color: var(--text-3);
+    letter-spacing: 0.3px;
+    transition: color 0.15s;
   }
-  .nav-label {
-    font-size: 9px; color: var(--text-dim);
-    letter-spacing: 0.5px; text-transform: uppercase;
-    transition: color 0.2s;
+  .nav-item.active .ni,
+  .nav-item.active .nl { color: var(--accent-light); }
+  .nav-item.active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 35%; right: 35%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 0 0 2px 2px;
   }
+
+  .spacer { height: 80px; }
 
   ::-webkit-scrollbar { width: 0; }
 </style>
 </head>
 <body>
 
-<div class="bg-layer"></div>
-
-<div class="app">
-
-  <div class="hero">
-    <div class="hero-glow"></div>
-    <div class="logo">Slog</div>
-    <div class="tagline">ваш цифровой голос</div>
-    <div class="hero-line"></div>
-    <div class="font-switch">
-      <button class="font-btn active" onclick="setFont('Playfair Display', this)">Playfair</button>
-      <button class="font-btn" onclick="setFont('Space Grotesk', this)">Space</button>
-      <button class="font-btn" onclick="setFont('Outfit', this)">Outfit</button>
-    </div>
+<!-- ══════ HERO ══════ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <div class="hero-logo"><span>Slog</span></div>
+    <div class="hero-tagline">AI-инструмент для вашего контента</div>
+    <div class="hero-user">Добро пожаловать, <span>Лиселия</span></div>
   </div>
-
-<script>
-function setFont(f, btn) {
-  document.querySelectorAll('.logo, .welcome-name, .stat-number, .action-title').forEach(el => {
-    el.style.fontFamily = f + ', sans-serif';
-  });
-  document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-</script>
-
-  <div class="welcome">
-    <div class="welcome-name">Привет, Лиселия</div>
-    <div class="welcome-sub">3 поста за эту неделю</div>
-  </div>
-
-  <div class="plan-bar">
-    <div class="plan-info">
-      <span class="plan-badge">Pro</span>
-      <span class="plan-text">12 из 90 постов</span>
-    </div>
-    <a class="plan-upgrade">Тарифы →</a>
-  </div>
-
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-number">2</div>
-      <div class="stat-label">Каналы</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">12</div>
-      <div class="stat-label">Постов</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">89%</div>
-      <div class="stat-label">Одобрено</div>
-    </div>
-  </div>
-
-  <div class="divider">
-    <div class="divider-line"></div>
-    <span class="divider-text">Быстрые действия</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="actions">
-    <div class="action-card c-violet">
-      <div class="action-icon-wrap">✍️</div>
-      <div class="action-title">Новый пост</div>
-      <div class="action-desc">Создать с AI</div>
-    </div>
-    <div class="action-card c-mint">
-      <div class="action-icon-wrap">📢</div>
-      <div class="action-title">Каналы</div>
-      <div class="action-desc">Управление</div>
-    </div>
-    <div class="action-card c-rose">
-      <div class="action-icon-wrap">📊</div>
-      <div class="action-title">Аналитика</div>
-      <div class="action-desc">Статистика</div>
-    </div>
-    <div class="action-card c-blue">
-      <div class="action-icon-wrap">⚙️</div>
-      <div class="action-title">Настройки</div>
-      <div class="action-desc">Профиль и стиль</div>
-    </div>
-  </div>
-
-  <div class="divider">
-    <div class="divider-line"></div>
-    <span class="divider-text">Ваши каналы</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="channel-card ch-violet">
-    <div class="channel-avatar av-violet">T</div>
-    <div class="channel-info">
-      <div class="channel-name">@tech_channel</div>
-      <div class="channel-meta">1.2K подписчиков · 5 постов</div>
-    </div>
-    <span class="channel-status s-violet">стиль ✓</span>
-  </div>
-
-  <div class="channel-card ch-mint">
-    <div class="channel-avatar av-mint">Б</div>
-    <div class="channel-info">
-      <div class="channel-name">@business_notes</div>
-      <div class="channel-meta">340 подписчиков · 7 постов</div>
-    </div>
-    <span class="channel-status s-mint">стиль ✓</span>
-  </div>
-
 </div>
 
+<!-- ══════ CONTENT ══════ -->
+<div class="content">
+
+  <!-- Status -->
+  <div class="status-strip">
+    <div class="status-item">
+      <div class="status-num">2</div>
+      <div class="status-label">канала</div>
+    </div>
+    <div class="status-item">
+      <div class="status-num">12</div>
+      <div class="status-label">постов</div>
+    </div>
+    <div class="status-item">
+      <div class="status-num">89%</div>
+      <div class="status-label">одобрено</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <button class="cta">
+    ✍️&nbsp; Создать пост
+  </button>
+
+  <!-- Quick actions -->
+  <div class="quick-actions">
+    <div class="qa">
+      <span class="qa-icon">📢</span>
+      <span class="qa-label">Каналы</span>
+    </div>
+    <div class="qa">
+      <span class="qa-icon">📊</span>
+      <span class="qa-label">Аналитика</span>
+    </div>
+    <div class="qa">
+      <span class="qa-icon">⚙️</span>
+      <span class="qa-label">Настройки</span>
+    </div>
+  </div>
+
+  <!-- Plan -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Тариф</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-top">
+        <div class="plan-name">
+          <span class="plan-badge">PRO</span>
+          Профессиональный
+        </div>
+        <button class="plan-upgrade-btn">Тарифы</button>
+      </div>
+      <div class="plan-progress">
+        <div class="plan-bar-outer">
+          <div class="plan-bar-inner"></div>
+        </div>
+      </div>
+      <div class="plan-meta">
+        <span>12 из 90 постов</span>
+        <span>до 12 мая</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channels -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Каналы</div>
+      <span class="section-action">+ Добавить</span>
+    </div>
+
+    <div class="channel">
+      <div class="channel-ava">T</div>
+      <div class="channel-body">
+        <div class="channel-name">@tech_channel</div>
+        <div class="channel-sub">1.2K подписчиков · стиль проанализирован</div>
+      </div>
+      <span class="channel-arrow">›</span>
+    </div>
+
+    <div class="channel">
+      <div class="channel-ava">Б</div>
+      <div class="channel-body">
+        <div class="channel-name">@business_notes</div>
+        <div class="channel-sub">340 подписчиков · стиль проанализирован</div>
+      </div>
+      <span class="channel-arrow">›</span>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<!-- ══════ NAV ══════ -->
 <div class="bottom-nav">
   <div class="nav-item active">
-    <span class="nav-icon">⬡</span>
-    <span class="nav-label">Главная</span>
+    <span class="ni">⌂</span>
+    <span class="nl">Главная</span>
   </div>
   <div class="nav-item">
-    <span class="nav-icon">◎</span>
-    <span class="nav-label">Каналы</span>
+    <span class="ni">◎</span>
+    <span class="nl">Каналы</span>
   </div>
   <div class="nav-item">
-    <span class="nav-icon">✦</span>
-    <span class="nav-label">Создать</span>
+    <span class="ni">✦</span>
+    <span class="nl">Создать</span>
   </div>
   <div class="nav-item">
-    <span class="nav-icon">◯</span>
-    <span class="nav-label">Профиль</span>
+    <span class="ni">◯</span>
+    <span class="nl">Профиль</span>
   </div>
 </div>
 
